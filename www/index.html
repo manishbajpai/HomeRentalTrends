@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+      form {
+        /* Just to center the form on the page */
+        margin: 0 auto;
+        width: 500px;
+        /* To see the outline of the form */
+        padding: 1em;
+        border: 1px solid #CCC;
+        border-radius: 1em;
+      }
+      form div + div {
+        margin-top: 1em;
+      }
+      label {
+        /* To make sure that all labels have the same size and are properly aligned */
+        display: inline-block;
+        width: 200px;
+        text-align: right;
+      }
+
+      input:focus, textarea:focus {
+        /* To give a little highlight on active elements */
+        border-color: #000;
+      }
+
+      .button {
+        /* To position the buttons to the same position of the text fields */
+        padding-left: 90px;
+        /* same size as the label elements */
+      }
+      button {
+        /* This extra margin represent roughly the same space as the space between the labels and their text fields */
+        margin-left: .5em;
+      }
+    </style>
+</head>
+<body>
+
+<h1>Average Rents</h1>
+<div>
+    <form>
+        <div>
+            <label for="city">Select a city:</label>
+            <select name="city" id="city">
+                <!--<option value="">--Please choose an option--</option>-->
+                <option value="bos">Boston, CA</option>
+                <option value="sfo">San Francisco, CA</option>
+                <option value="sjc">San Jose, CA</option>
+                <option value="mia">Miami, FL</option>
+                <option value="sea">Seattle, WA</option>
+                <option value="nyc">New York, NY</option>
+                <option value="dc">Washington, DC</option>
+            </select>
+            <label for="fromdate">From:</label>
+            <input type="date" id="fromdate" name="fromdate">
+            <label for="todate">To:</label>
+            <input type="date" id="todate" name="todate">
+            <p><strong>Note:</strong> Date is not supported in Safari or Internet Explorer 11 (or earlier).</p>
+        </div>
+
+        <div class="button">
+            <button id="startsim">Submit</button>
+        </div>
+    </form>
+
+</div>
+
+<script>
+//////////////////////////////////////////////////////////
+//helpers so that we can use the same code with khan academy
+var println = function(str) {
+    console.log(str);
+};
+//helpers
+document.getElementById("startsim").onclick = function() {
+    event.preventDefault();
+    println("khjhkj");
+    drawChart();
+};
+
+</script>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+    </script>
+    <script type="text/javascript" src="cityrent.js"></script>
+
+    <script type="text/javascript">
+
+        // Load the Visualization API and the corechart package.
+        google.charts.load('current', {'packages':['corechart']});
+
+        // Set a callback to run when the Google Visualization API is loaded.
+        google.charts.setOnLoadCallback(drawChart);
+
+        //var rentdata = [];
+        // Callback that creates and populates a data table,
+        // instantiates the pie chart, passes in the data and
+        // draws it.
+        function drawChart() {
+            console.log("rentdata"+ rentdata[0][0]);
+
+            // Create the data table.
+            var temp = [];
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Date');
+            data.addColumn('number', 'Rent');
+            for (i = 0; i < rentdata.length; i++) {
+                //console.log("rentdata"+ rentdata[i]);
+
+                if(rentdata[i][0] === 'Santa Clara' && (rentdata[i][2] === 1)) {
+                    console.log("rentdata"+ rentdata[i]);
+                    temp.push([rentdata[i][1], rentdata[i][3]]);
+                }
+            }
+            data.addRows(temp);
+
+
+            // Set chart options
+            var options = {'title':'Rental trend',
+                           'width':600,
+                           'height':600};
+
+            // Instantiate and draw our chart, passing in some options.
+            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+        }
+    </script>
+
+<div id="chart_div"></div>
+
+</body>
+</html>
