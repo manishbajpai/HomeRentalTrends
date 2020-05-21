@@ -58,7 +58,7 @@ priceList2 = main(sys.argv[2])
 x = datetime.datetime.now()
 today = x.strftime("%Y-%m-%d")
 
-str = "{}, {}, {}, {:.0f}, {}, {:.0f},".format(city, state, today, statistics.median(priceList1), len(priceList1),
+str = "{}, {}, {}, {:.0f}, {}, {:.0f}, ".format(city, state, today, statistics.median(priceList1), len(priceList1),
         statistics.stdev(priceList1))
 str = str + "{:.0f}, {}, {:.0f}\n".format(statistics.median(priceList2), len(priceList2), statistics.stdev(priceList2))
 
