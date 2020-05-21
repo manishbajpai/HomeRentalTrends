@@ -99,69 +99,49 @@ document.getElementById("startsim").onclick = function() {
     var city = document.getElementById("city").value
     drawChart(city);
 };
-
 </script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript" src="cityrent_v2.js"></script>
+<script type="text/javascript">
+// Load the Visualization API and the corechart package.
+google.charts.load('current', {'packages':['corechart']});
 
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
+// Set a callback to run when the Google Visualization API is loaded.
+//google.charts.setOnLoadCallback(drawChart);
 
-    </script>
-    <script type="text/javascript" src="cityrent_v2.js"></script>
+function createTable_v2(city) {
+    var temp = [];
 
-    <script type="text/javascript">
-
-        // Load the Visualization API and the corechart package.
-        google.charts.load('current', {'packages':['corechart']});
-
-        // Set a callback to run when the Google Visualization API is loaded.
-        //google.charts.setOnLoadCallback(drawChart);
-
-        function createTable_v1() {
-            var temp = [];
-
-            for (i = 0; i < rentdata.length; i++) {
-                if(rentdata[i][0] === 'Santa Clara' && (rentdata[i][2] === 1)) {
-                    //console.log("rentdata"+ rentdata[i]);
-                    temp.push([rentdata[i][1], rentdata[i][3]]);
-                }
-            }
+    for (i = 0; i < rentdata.length; i++) {
+        //console.log("rentdata"+ rentdata[i]);
+        if(rentdata[i][0] === city) {
+            //console.log("rentdata"+ rentdata[i]);
+            temp.push([rentdata[i][2], rentdata[i][3], rentdata[i][4]]);
         }
-        function createTable_v2(city) {
-            var temp = [];
+    }
+    println(temp)
+    return temp;
+}
+function drawChart(city) {
+    var fromdate = document.getElementById("fromdate").value
+    var todate = document.getElementById("todate").value
+    println("dates: " + fromdate + sp + todate)
 
-            for (i = 0; i < rentdata.length; i++) {
-                //console.log("rentdata"+ rentdata[i]);
-                if(rentdata[i][0] === city) {
-                    //console.log("rentdata"+ rentdata[i]);
-                    temp.push([rentdata[i][2], rentdata[i][3], rentdata[i][4]]);
-                }
-            }
-            println(temp)
-            return temp;
-        }
-        function drawChart(city) {
-            var fromdate = document.getElementById("fromdate").value
-            var todate = document.getElementById("todate").value
-            println("dates: " + fromdate + sp + todate)
+    // Create the data table.
+    var data = new google.visualization.DataTable();
 
-            // Create the data table.
-            var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Date');
+    data.addColumn('number', '1 Bed Rent');
+    data.addColumn('number', '2 Bed Rent');
+    data.addRows(createTable_v2(city));
 
-            data.addColumn('string', 'Date');
-            data.addColumn('number', '1 Bed Rent');
-            data.addColumn('number', '2 Bed Rent');
-            data.addRows(createTable_v2(city));
+    var options = {'title':'Rental trend', 'width':1200, 'height':900};
 
-            // Set chart options
-            var options = {'title':'Rental trend',
-                           'width':1200,
-                           'height':900};
-
-            // Instantiate and draw our chart, passing in some options.
-            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-            chart.draw(data, options);
-        }
-    </script>
+    // Instantiate and draw our chart, passing in some options.
+    var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+    chart.draw(data, options);
+}
+</script>
 
 <div id="chart_div"></div>
 
