@@ -44,14 +44,14 @@
     <form>
         <div>
             <label for="city">Select a city:</label>
-            <select name="city" id="city">
+            <select name="city" id="city" onchange="updateChart()">
                 <!--<option value="">--Please choose an option--</option>-->
                 <option value="Boston">Boston, MA</option>
                 <option value="San Francisco">San Francisco, CA</option>
                 <option value="Cupertino">Cupertino, CA</option>
                 <option value="Philadelphia">Philadelphia, PA</option>
                 <option value="Los Angeles">Los Angeles, CA</option>
-                <option value="San Jose">San Jose, CA</option>
+                <option value="Santa Clara">Santa Clara, CA</option>
                 <option value="Miami">Miami, FL</option>
                 <option value="Seattle">Seattle, WA</option>
                 <option value="New York">New York, NY</option>
@@ -99,6 +99,10 @@ document.getElementById("startsim").onclick = function() {
     var city = document.getElementById("city").value
     drawChart(city);
 };
+function updateChart() {
+    var city = document.getElementById("city").value
+    drawChart(city);
+}
 </script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript" src="cityrent_v2.js"></script>
