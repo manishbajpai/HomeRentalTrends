@@ -1,6 +1,7 @@
 import statistics
 import sys
 from html.parser import HTMLParser
+import datetime
 
 class MyHTMLParser(HTMLParser):
     def __init__(self):
@@ -48,12 +49,30 @@ def main(name):
     del parser
     return ret
 
+city = sys.argv[3]
+state = sys.argv[4]
 priceList1 = main(sys.argv[1])
 
 priceList2 = main(sys.argv[2])
-print("{0:.0f}, {1}, {2:.0f},".format(statistics.median(priceList1), len(priceList1),
-        statistics.stdev(priceList1)), end=" ")
 
-print("{0:.0f}, {1}, {2:.0f}".format(statistics.median(priceList2), len(priceList2), statistics.stdev(priceList2)))
-#for x in priceList:
-#    print(x)
+x = datetime.datetime.now()
+today = x.strftime("%Y-%m-%d")
+
+str = "{}, {}, {}, {:.0f}, {}, {:.0f},".format(city, state, today, statistics.median(priceList1), len(priceList1),
+        statistics.stdev(priceList1))
+str = str + "{:.0f}, {}, {:.0f}\n".format(statistics.median(priceList2), len(priceList2), statistics.stdev(priceList2))
+
+if (len(sys.argv) <=5):
+    f = sys.stdout
+else:
+    f = open(sys.argv[5], "a")
+f.write(str)
+str = "\"{}\", \"{}\", \"{}\", {:.0f}, {:.0f}".format(city, state, today, statistics.median(priceList1),
+        statistics.median(priceList2))
+str = "rentdata.push(["+str+"])\n"
+
+if (len(sys.argv) <=6):
+    f = sys.stdout
+else:
+    f = open(sys.argv[6], "a")
+f.write(str);
