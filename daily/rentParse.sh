@@ -1,6 +1,6 @@
 ##The idea is to keep the data in csv format so that we can plot it well
 csvname="analysis4.csv"
-jsname="../www/cityrent.js"
+jsname="../www/cityrent_v2.js"
 rawpath="../../raw"
 
 getsouthbaycity() {
