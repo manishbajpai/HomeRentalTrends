@@ -39,13 +39,21 @@ class MyHTMLParser(HTMLParser):
             self.priceFound = 0
             self.priceList.append(int(data[1:]))
 
-#f = open("temp.html", "r")
-f = open(sys.argv[1], "r")
+def main(name):
+    f = open(name, "r")
+    page = f.read()
+    parser = MyHTMLParser()
+    parser.feed(page)
+    ret = parser.priceList.copy();
+    del parser
+    return ret
 
-page = f.read()
-parser = MyHTMLParser()
-parser.feed(page)
-priceList = parser.priceList
-print("{0:.0f}, {1} {2:.0f}".format(statistics.median(priceList), len(priceList), statistics.stdev(priceList)))
+priceList1 = main(sys.argv[1])
+
+priceList2 = main(sys.argv[2])
+print("{0:.0f}, {1}, {2:.0f},".format(statistics.median(priceList1), len(priceList1),
+        statistics.stdev(priceList1)), end=" ")
+
+print("{0:.0f}, {1}, {2:.0f}".format(statistics.median(priceList2), len(priceList2), statistics.stdev(priceList2)))
 #for x in priceList:
 #    print(x)

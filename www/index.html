@@ -37,7 +37,7 @@
       }
     </style>
 </head>
-<body>
+<body  onload="init()">
 
 <h1>Average Rents</h1>
 <div>
@@ -46,19 +46,21 @@
             <label for="city">Select a city:</label>
             <select name="city" id="city">
                 <!--<option value="">--Please choose an option--</option>-->
-                <option value="bos">Boston, CA</option>
-                <option value="sfo">San Francisco, CA</option>
-                <option value="sjc">San Jose, CA</option>
-                <option value="mia">Miami, FL</option>
-                <option value="sea">Seattle, WA</option>
-                <option value="nyc">New York, NY</option>
-                <option value="dc">Washington, DC</option>
+                <option value="Boston">Boston, MA</option>
+                <option value="San Francisco">San Francisco, CA</option>
+                <option value="Cupertino">Cupertino, CA</option>
+                <option value="Philadelphia">Philadelphia, PA</option>
+                <option value="Los Angeles">Los Angeles, CA</option>
+                <option value="San Jose">San Jose, CA</option>
+                <option value="Miami">Miami, FL</option>
+                <option value="Seattle">Seattle, WA</option>
+                <option value="New York">New York, NY</option>
+                <option value="Washington">Washington, DC</option>
             </select>
             <label for="fromdate">From:</label>
-            <input type="date" id="fromdate" name="fromdate">
+            <input type="date" id="fromdate" name="fromdate" value="2020-05-03" min="2020-05-11">
             <label for="todate">To:</label>
-            <input type="date" id="todate" name="todate">
-            <p><strong>Note:</strong> Date is not supported in Safari or Internet Explorer 11 (or earlier).</p>
+            <input type="date" id="todate" name="todate" value="2020-05-12" min="2020-05-11">
         </div>
 
         <div class="button">
@@ -71,14 +73,31 @@
 <script>
 //////////////////////////////////////////////////////////
 //helpers so that we can use the same code with khan academy
+var sp = " "
 var println = function(str) {
     console.log(str);
 };
+var curday = function(sp){
+    today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //As January is 0.
+    var yyyy = today.getFullYear();
+
+    if(dd<10) dd='0'+dd;
+    if(mm<10) mm='0'+mm;
+    return (yyyy+sp+mm+sp+dd);
+};
+function init() {
+    d = curday('-')
+    console.log(d);
+    document.getElementById("todate").value = d
+}
+
 //helpers
 document.getElementById("startsim").onclick = function() {
     event.preventDefault();
-    println("khjhkj");
-    drawChart();
+    var city = document.getElementById("city").value
+    drawChart(city);
 };
 
 </script>
@@ -87,7 +106,7 @@ document.getElementById("startsim").onclick = function() {
     <script type="text/javascript">
 
     </script>
-    <script type="text/javascript" src="cityrent.js"></script>
+    <script type="text/javascript" src="cityrent_v2.js"></script>
 
     <script type="text/javascript">
 
@@ -95,35 +114,48 @@ document.getElementById("startsim").onclick = function() {
         google.charts.load('current', {'packages':['corechart']});
 
         // Set a callback to run when the Google Visualization API is loaded.
-        google.charts.setOnLoadCallback(drawChart);
+        //google.charts.setOnLoadCallback(drawChart);
 
-        //var rentdata = [];
-        // Callback that creates and populates a data table,
-        // instantiates the pie chart, passes in the data and
-        // draws it.
-        function drawChart() {
-            console.log("rentdata"+ rentdata[0][0]);
-
-            // Create the data table.
+        function createTable_v1() {
             var temp = [];
-            var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Date');
-            data.addColumn('number', 'Rent');
-            for (i = 0; i < rentdata.length; i++) {
-                //console.log("rentdata"+ rentdata[i]);
 
+            for (i = 0; i < rentdata.length; i++) {
                 if(rentdata[i][0] === 'Santa Clara' && (rentdata[i][2] === 1)) {
-                    console.log("rentdata"+ rentdata[i]);
+                    //console.log("rentdata"+ rentdata[i]);
                     temp.push([rentdata[i][1], rentdata[i][3]]);
                 }
             }
-            data.addRows(temp);
+        }
+        function createTable_v2(city) {
+            var temp = [];
 
+            for (i = 0; i < rentdata.length; i++) {
+                //console.log("rentdata"+ rentdata[i]);
+                if(rentdata[i][0] === city) {
+                    //console.log("rentdata"+ rentdata[i]);
+                    temp.push([rentdata[i][2], rentdata[i][3], rentdata[i][4]]);
+                }
+            }
+            println(temp)
+            return temp;
+        }
+        function drawChart(city) {
+            var fromdate = document.getElementById("fromdate").value
+            var todate = document.getElementById("todate").value
+            println("dates: " + fromdate + sp + todate)
+
+            // Create the data table.
+            var data = new google.visualization.DataTable();
+
+            data.addColumn('string', 'Date');
+            data.addColumn('number', '1 Bed Rent');
+            data.addColumn('number', '2 Bed Rent');
+            data.addRows(createTable_v2(city));
 
             // Set chart options
             var options = {'title':'Rental trend',
-                           'width':600,
-                           'height':600};
+                           'width':1200,
+                           'height':900};
 
             // Instantiate and draw our chart, passing in some options.
             var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
