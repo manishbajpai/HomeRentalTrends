@@ -99,7 +99,7 @@ getmiami() {
     sleep 1 #We don't want to get blacklisted
 
     fname1="$rawpath/$3_1bd_$(date '+%Y%m%d').html"
-    #curl "https://miami.craigslist.org/search/apa?bundleDuplicates=1&min_bedrooms=1&max_bedrooms=1&availabilityMode=0&sale_date=all+dates" > "$fname1"
+    curl "https://miami.craigslist.org/search/apa?bundleDuplicates=1&min_bedrooms=1&max_bedrooms=1&availabilityMode=0&sale_date=all+dates" > "$fname1"
     python3 pyRentParse.py $fname1 $fname2 "$1" "$2" $csvname $jsname
     sleep 1 #We don't want to get blacklisted
 }
